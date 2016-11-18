@@ -60,7 +60,6 @@ public class OGDPService extends Service implements OGDPListenHandlerThread.OGDP
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        // optional flag to not do a discovery immediately
         processIntent(intent);
         return Service.START_STICKY;
 
@@ -131,7 +130,7 @@ public class OGDPService extends Service implements OGDPListenHandlerThread.OGDP
 
         if (mListenerThread!=null){
             mSocket.close();
-            mSocket = null;
+            mListenerThread.quit();
         }
 
     }
@@ -151,7 +150,7 @@ public class OGDPService extends Service implements OGDPListenHandlerThread.OGDP
         Intent intent = new Intent();
         intent.setAction("ogdp");
         intent.putExtra("error", message);
-        sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
     }
 
